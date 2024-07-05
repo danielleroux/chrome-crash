@@ -1,4 +1,4 @@
-import { Component, Fragment, Host, State, h } from '@stencil/core';
+import { Component, Host, Listen, State, h } from '@stencil/core';
 
 @Component({
   tag: 'comp-a',
@@ -6,29 +6,30 @@ import { Component, Fragment, Host, State, h } from '@stencil/core';
   shadow: true,
 })
 export class CompA {
-  @State() isDesktop: boolean = false;
+  @State() doTheCrash: boolean = false;
 
-  connectedCallback() {
-    window.matchMedia('(min-width: 500px)').addEventListener('change', () => {
-      this.isDesktop = window.matchMedia('(min-width: 500px)').matches;
-    });
+  @State() isResized = false;
+
+  @Listen('resize', { target: 'window' })
+  onResize() {
+    this.isResized = true;
   }
 
   render() {
     return (
       <Host>
-        {this.isDesktop ? (
+        <p>Make sure you have dev tools open before enter the side OR resize it ones after open the dev tools</p>
+        <button onClick={() => (this.doTheCrash = !this.doTheCrash)}>{!this.isResized ? 'Resize window via dev Console' : 'Crash the chrome now!'}</button>
+        {this.doTheCrash ? (
           <div>
             Desktop
             <slot></slot>
           </div>
         ) : (
-          <Fragment>
-            <comp-b>
-              Mobile
-              <slot></slot>
-            </comp-b>
-          </Fragment>
+          <comp-b>
+            Mobile
+            <slot></slot>
+          </comp-b>
         )}
       </Host>
     );

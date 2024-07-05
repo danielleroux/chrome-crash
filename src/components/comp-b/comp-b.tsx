@@ -6,19 +6,11 @@ import { Component, Host, State, h } from '@stencil/core';
   shadow: true,
 })
 export class CompB {
-  @State() show = false;
-
-  connectedCallback() {
-    setInterval(() => {
-      this.show = !this.show;
-    }, 1000);
-  }
-
   render() {
     return (
       <Host
         class={{
-          show: this.show,
+          show: false,
         }}
       >
         <slot></slot>
