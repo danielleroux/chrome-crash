@@ -6,6 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface CompA {
+    }
+    interface CompB {
+    }
     interface MyComponent {
         /**
           * The first name
@@ -22,6 +26,18 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLCompAElement extends Components.CompA, HTMLStencilElement {
+    }
+    var HTMLCompAElement: {
+        prototype: HTMLCompAElement;
+        new (): HTMLCompAElement;
+    };
+    interface HTMLCompBElement extends Components.CompB, HTMLStencilElement {
+    }
+    var HTMLCompBElement: {
+        prototype: HTMLCompBElement;
+        new (): HTMLCompBElement;
+    };
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
     var HTMLMyComponentElement: {
@@ -29,10 +45,16 @@ declare global {
         new (): HTMLMyComponentElement;
     };
     interface HTMLElementTagNameMap {
+        "comp-a": HTMLCompAElement;
+        "comp-b": HTMLCompBElement;
         "my-component": HTMLMyComponentElement;
     }
 }
 declare namespace LocalJSX {
+    interface CompA {
+    }
+    interface CompB {
+    }
     interface MyComponent {
         /**
           * The first name
@@ -48,6 +70,8 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface IntrinsicElements {
+        "comp-a": CompA;
+        "comp-b": CompB;
         "my-component": MyComponent;
     }
 }
@@ -55,6 +79,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "comp-a": LocalJSX.CompA & JSXBase.HTMLAttributes<HTMLCompAElement>;
+            "comp-b": LocalJSX.CompB & JSXBase.HTMLAttributes<HTMLCompBElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
         }
     }
